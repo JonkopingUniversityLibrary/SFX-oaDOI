@@ -11,8 +11,8 @@ var SFXoaDOI = (function () {
                 sv: 'Fulltext tillg&auml;nglig som'
             },
             moreVersionsFound: {
-                en: 'More versions of this article was found:',
-                sv: 'Fler versioner av denna artikel hittades:'
+                en: 'Another version of this article was found:',
+                sv: 'En annan version av artikeln hittades:'
             },
             openAccess: {
                 en: 'Open Access',
@@ -90,13 +90,19 @@ var SFXoaDOI = (function () {
      * @private
      */
     var _printLink = function(data){
-        if(data.is_free_to_read){
+
+        console.log(typeof data);
+        // Check if link exists
+        if(typeof data !== 'undefined' && data.is_free_to_read){
             var element = '\
-                <p style="margin-top: 10px; font-size: 13px; color: rgb(125,125,125)">'+STRINGS.moreVersionsFound[LANGUAGE]+'</p>\
+                <p style="margin-top: 20px; font-size: 13px; font-weight: 700; color: rgb(125,125,125)">'+STRINGS.moreVersionsFound[LANGUAGE]+'</p>\
                 <div class="oaDOI oa-'+data.oa_color+'">\
                     <p><a target="_blank" href="'+data.free_fulltext_url+'">'+STRINGS.fulltextAvailable[LANGUAGE]+'</a> <span class="targetName">'+STRINGS.openAccess[LANGUAGE]+'</span></p>\
                 </div>';
             $('#services').after(element);
+
+            // Add field to error reporting feature
+            $('#sfx-feedback-form').append('<input type="hidden" value="'+STRINGS.fulltextAvailable[LANGUAGE]+' '+STRINGS.openAccess[LANGUAGE]+'" name="ticket-services[]">');
         }
 
     };
